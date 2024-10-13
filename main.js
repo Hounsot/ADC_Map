@@ -72,7 +72,7 @@ const divisions = 100;
 const gridHelper = new THREE.GridHelper(size, divisions);
 scene.add(gridHelper);
 
-camera.position.set(8, 3, 8);
+camera.position.set(80, 30, 80);
 camera.lookAt(cube);
 controls.update(); //controls.update() must be called after any manual changes to the camera's transform
 // For each company ID, create a circle and place it randomly on the grid. After that create users associated with that company and place them around company circle.
@@ -134,11 +134,20 @@ companies.forEach(company => {
     let userCube = new THREE.Mesh(userGeometry, userMaterial);
     // Set position of the cube
     userCube.position.set(userX, userY, userZ);
+    user.mesh = userCube;
+    userCube.lookAt(camera.position);
     scene.add(userCube);
   });
 });
 
 function animate() {
+  controls.update();
+  companies.forEach(company => {
+    company.users.forEach(user => {
+      console.log(user.mesh);
+      user.mesh.lookAt(camera.position);
+    });
+  });
   renderer.render(scene, camera);
 }
 renderer.setAnimationLoop(animate);
